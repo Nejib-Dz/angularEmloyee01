@@ -1,0 +1,26 @@
+<nav class=" navbar navbar-light bg-primary">
+  <div class="container-fluid" >
+ <h1 style="color:aliceblue; text-transform:uppercase;">Liste des Departement</h1>
+<button  class="btn btn-success" routerLink="/ajouterdepartement" >Ajouter Departement</button>
+</div>
+</nav>
+
+<table class="table table-striped">
+  <thead class="bg-info">
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dpt of listDepartements" class="col-md-6 col-xl-5">
+      <td>{{dpt.iddpt}}</td>
+      <td>{{dpt.name}}</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
