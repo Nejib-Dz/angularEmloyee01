@@ -7,7 +7,7 @@ import { AjouterdepartementComponent } from './ajouterdepartement/ajouterdeparte
 import { EmployeeComponent } from './employee/employee.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListDepartementComponent } from './list-departement/list-departement.component';
 
 
@@ -23,7 +23,8 @@ import { ListDepartementComponent } from './list-departement/list-departement.co
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

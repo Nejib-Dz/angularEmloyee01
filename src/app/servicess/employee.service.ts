@@ -14,7 +14,7 @@ export class EmployeeService {
     throw new Error('Method not implemented.');
   }
 
-  localUrl: string ='http://localhost:8080/api/v1/employee'
+  localUrl: string ='http://localhost:8080/api/v1/Employee'
   constructor(private http: HttpClient) { }
 
   ajouterEmployee(emp : Employee):Observable<Employee>{
@@ -27,5 +27,9 @@ export class EmployeeService {
   deletEmployee(id:number):Observable<Employee>{
     return this.http.delete<Employee>(`${this.localUrl}/delet/${id}`)
 
+  }
+
+  getEmployeeBydi(id:number):Observable<Employee>{
+ return this.http.get<Employee>(`${this.localUrl}/byid/${id}`)
   }
 }

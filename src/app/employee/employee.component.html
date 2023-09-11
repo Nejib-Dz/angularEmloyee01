@@ -1,24 +1,382 @@
-<!-- Button trigger modal
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>-->
+<button
+  type="button"
+  class="btn btn-primary btn-lg"
+  data-toggle="modal"
+  data-target="#myModal"
+>
+  Ajouter Employee
+</button>
 
-<button type="button" class="btn btn-info"   data-toggle="modal" data-target="#exampleModal"><i class="si si-plus"></i> Ajouter  </button>
+<table class="table table-striped">
+  <thead class="bg-info">
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">FullName</th>
+      <th scope="col">Age</th>
+      <th scope="col">Email</th>
+      <th scope="col">tel</th>
+      <th scope="col">departement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let emp of employees" class="col-md-6 col-xl-5">
+      <td>{{ emp.idEmp }}</td>
+      <td>{{ emp.fullname }}</td>
+      <td>{{ emp.age }}</td>
+      <td>{{ emp.email }}</td>
+      <td>{{ emp.tel }}</td>
+      <td>{{ emp.departement.name }}</td>
+      <td style="background-color: beige">
+        <div class="btn-group btn-group-sm" >
+          <a data-toggle="modal"
+          data-target="#myViewModal" (click)="findByIdEmployee(emp.idEmp)" class="btn btn-warning"
+            ><i style="color: white" class="bi bi-0-circle"></i>View</a
+          >
+     <!--ojouter formation-->
+
+     <a
+     data-toggle="modal"
+     data-target="#myViewFormation"
+    (click)="requipeId(emp.idEmp)"
+     class="btn btn-success ml-2 mr-2"
+     ><i style="color: white" class="bi bi-0-circle"></i>Ajouter Formation</a
+   >
+
+
+          <a (click)="deleteData(emp.idEmp)" class="btn btn-danger"
+            ><i style="color: white" class="bi bi-0-circle">Delete</i></a
+          >
+
+          <!--<a (click)="Deletedepartement(dep.id)" class="btn btn-danger"><i class="fas fa-trash"></i></a>!-->
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!--ajouter employee-->
+
+<!-- Button trigger modal
+  button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+ Modal -->
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
+    <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header bg-primary">
+        <h3> Nouveau (Emlpoyee)</h3>
+        <button #closeModalBtn type="button" class="close" data-dismiss="modal">
+        &times;
+        </button>
       </div>
       <div class="modal-body">
-        ...
+        <form [formGroup]="emplFormGroup">
+          <div class="form-group">
+            <div class="col">
+              <label for="exampleFormControlInput1">fullname</label>
+              <input
+                class="form-control"
+                id="fullName"
+                required
+                formControlName="fullname"
+                name="fullname"
+                type="string"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup.get('fullname')?.invalid"
+                class="text-danger"
+                >fullName est obligatoire</small
+              >
+            </div>
+            <div class="col">
+              <label for="exampleFormControlInput1">age</label>
+              <input
+                class="form-control"
+                id="age"
+                required
+                formControlName="age"
+                name="age"
+                type="string"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup.get('age')?.invalid"
+                class="text-danger"
+                >age est obligatoire</small
+              >
+            </div>
+
+            <div class="col">
+              <label for="exampleFormControlInput1">email</label>
+              <input
+                class="form-control"
+                id="mail"
+                required
+                formControlName="email"
+                name="mail"
+                type="mail"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup.get('email')?.invalid"
+                class="text-danger"
+                >datenaiss est obligatoire</small
+              >
+            </div>
+            <div class="col">
+              <label for="exampleFormControlInput1">tel</label>
+              <input
+                class="form-control"
+                id="datenaiss"
+                required
+                formControlName="tel"
+                name="datenaiss"
+                type="text"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup.get('tel')?.invalid"
+                class="text-danger"
+                >datenaiss est obligatoire</small
+              >
+            </div>
+
+
+          <div class="col" >
+            <label>list of departement</label>
+            <select class="form-select form-control"  formControlName="departement">
+              <option *ngFor="let dep of listDepartements" [ngValue]="dep">
+                {{ dep.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+          <button class="btn btn-primary" style="margin-left: 15px;" (click)="addEmployee()">
+            Ajouter
+          </button>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal view -->
+<div id="myViewModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h3>Employee (update)</h3>
+        <button #closeUpdateModalBtn type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container col-12">
+          <div class="row">
+        <form [formGroup]="emplFormGroup2" class="row col-12">
+
+            <div class="col-md-4">
+              <label for="exampleFormControlInput1">fullname</label>
+              <input
+                class="form-control"
+                id="fullName"
+                required
+                formControlName="fullname"
+                name="fullname"
+                type="string"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup2.get('fullname')?.invalid"
+                class="text-danger"
+                >fullName est obligatoire</small
+              >
+            </div>
+            <div class="col">
+              <label for="exampleFormControlInput1">age</label>
+              <input
+                class="form-control"
+                id="age"
+                required
+                formControlName="age"
+                name="age"
+                type="string"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup2.get('age')?.invalid"
+                class="text-danger"
+                >age est obligatoire</small
+              >
+            </div>
+
+            <div class="col-md-4 ">
+              <label for="exampleFormControlInput1">email</label>
+              <input
+                class="form-control"
+                id="datenaiss"
+                required
+                formControlName="email"
+                name="datenaiss"
+                type="mail"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup2.get('email')?.invalid"
+                class="text-danger"
+                >datenaiss est obligatoire</small
+              >
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="exampleFormControlInput1">tel</label>
+              <input
+                class="form-control"
+                id="datenaiss"
+                required
+                formControlName="tel"
+                name="datenaiss"
+                type="text"
+              />
+              <small
+                *ngIf="submitted && emplFormGroup2.get('tel')?.invalid"
+                class="text-danger"
+                >datenaiss est obligatoire</small
+              >
+            </div>
+
+
+
+            <div class="col-md-6 mt-3" >
+              <label>list of departement</label>
+              <select class="form-select form-control"   formArrayName="departement">
+                <option *ngFor="let dep of listDepartements" [ngValue]="dep">
+                  {{ dep.name }}
+                </option>
+              </select>
+            </div>
+
+          <button class="btn btn-primary mt-3" style="margin-left: 15px; height:40px;" (click)="updateEmploye()">
+            Update
+          </button>
+
+
+          <a
+          data-toggle="modal"
+          data-target="#myViewFormation"
+          (click)="requipeId(idEmployee)"
+          class="btn btn-success mt-4 ml-2 mr-2"
+          ><i style="color: white"></i>Ajouter Formation</a
+        >
+      </form>
+
+          <table class="table table-striped mt-3">
+            <thead>
+              <tr>
+                <th scope="col">intitule</th>
+                <th scope="col">organisme</th>
+                <th scope="col">tuteur</th>
+                <th scope="col">dtDebut</th>
+                <th scope="col">dtFin</th>
+                <th scope="col">duree</th>
+                <th scope="col">image</th>
+                <th scope="col">description</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr
+                *ngFor="let form of listFormation"
+                class="col-md-6 col-xl-5"
+              >
+                <td>{{ form.intitule }}</td>
+                <td>{{ form.organisme }}</td>
+                <td>{{ form.tuteur }}</td>
+                <td>{{ form.dtDebut | date : "dd-MM-yyyy" }}</td>
+                <td>{{ form.dtFin | date : "dd-MM-yyyy" }}</td>
+                <td>{{ form.duree }}</td>
+                <td><img src=" {{ form.image }}" /></td>
+                <td>{{ form.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<!--Modal ajouter formation-->
+
+<div id="myViewFormation" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" >
+    <!-- Modal content-->
+    <div class="modal-content ">
+      <div class="modal-header bg-primary">
+        Formation (Nouveau)
+        <button type="button" #closeModalBtn class="close" data-dismiss="modal" aria-label="Fermer" (click)="showModal = false">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body " >
+        <div class="container col-12">
+          <div class="row">
+        <form [formGroup]="emplFormGroupFormation" class="row  col-12 text-center" >
+          <div class="col-12" >
+            <label for="intitule" class="form-label"></label>
+            <input type="text" formControlName="intitule" class="form-control" id="exampleInput" placeholder="Intitulé*">
+            <small
+            *ngIf="submitted && emplFormGroupFormation.get('intitule')?.invalid"
+            class=""
+            ></small
+          >
+          </div>
+          <div class="col-md-6">
+            <label for="inputEmail4" class="form-label"></label>
+            <input type="text" formControlName="organisme" class="form-control" id="inputEmail4" placeholder="Organisme*">
+          </div>
+          <div class="col-md-6">
+            <label for="inputEmail4" class="form-label"></label>
+            <input type="text"  formControlName="tuteur" class="form-control" id="inputPassword4" placeholder="Tuteur*">
+          </div>
+
+          <div class="col-4">
+            <label for="inputEmail4" class="form-label"></label>
+            <input type="date" formControlName="dtDebut" class="form-control" id="inputAddress2" placeholder="Date de Début*">
+          </div>
+          <div class="col-md-4">
+            <label for="" class="form-label"></label>
+            <input type="date" formControlName="dtFin" class="form-control" id="inputCity" placeholder="Fin de Date*">
+          </div>
+          <div class="col-md-4">
+            <label for="Duree" class="form-label"></label>
+            <input type="time" formControlName="duree" class="form-control"  required placeholder="Duree:">
+          </div>
+
+          <!-- Default checked -->
+          <div class="col-md-2 mt-4">
+        <div class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
+          <label class="custom-control-label" for="customSwitch1">Certifiante</label>
+        </div>
+          </div>
+
+          <div class="form-file col-md-9 mt-3 " >
+            <input type="file" formControlName="image" class="form-control btn btn-primary"  id="myFile" name="myFile" style="margin-left: 60px;">
+          </div>
+
+          <div class="form-floating col-md-12 mt-4">
+            <textarea class="form-control" formControlName="description" placeholder="Description" id="floatingTextarea2" style="height: 100px"></textarea>
+            <label for="floatingTextarea2"></label>
+          </div>
+          <div class="col-md-12 mt-4" style="margin-left: 100px;">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="showModal = false"  style="margin-left:210px;">Annuler</button>
+        <button type="button" class="btn btn-secondary" style="margin-left: 10px;">Ajouter et écréer</button>
+        <button type="button" class="btn btn-success" style="margin-left: 10px;"
+        (click)="ajouterFormation(); showModal = false" >Ajouter</button>
+        </div>
+
+        </form>
+        </div>
+        </div>
       </div>
     </div>
   </div>

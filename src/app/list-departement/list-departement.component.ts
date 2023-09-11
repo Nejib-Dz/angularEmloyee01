@@ -8,7 +8,9 @@ import { Departement } from '../models/departement';
   styleUrls: ['./list-departement.component.css']
 })
 export class ListDepartementComponent implements OnInit{
+
 listDepartements!: Departement[]
+
 constructor(private dpservice:DepartementService ){}
 
 ngOnInit(): void {
